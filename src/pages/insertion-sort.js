@@ -7,3 +7,5 @@ export const InsertionSort = () => {
         </div>
     )
 }
+
+export default InsertionSort

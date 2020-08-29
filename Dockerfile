@@ -12,8 +12,8 @@ RUN apt update && apt install -y curl && \
     rm -rf /var/lib/apt/list/* && \
     npm install && gatsby build
 
-EXPOSE 80
+EXPOSE $PORT
 
-CMD ["gatsby", "serve", "-H", "0.0.0.0"]
+CMD gatsby serve -H 0.0.0.0 -p $PORT
  
 

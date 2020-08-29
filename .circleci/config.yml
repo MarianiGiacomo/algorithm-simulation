@@ -1,19 +1,16 @@
 version: 2.1
 orbs:
   docker: circleci/docker@1.0.0
-  heroku: circleci/heroku@1.0.0
+  heroku: circleci/heroku@1.2.2
 workflows:
-  deploy:
+  docker_deploy:
     jobs:
       - docker/publish:
           image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
           tag: 'latest'
   heroku_deploy:
     jobs:
-      - build
       - heroku/deploy-via-git:
-          requires:
-            - build # only run deploy-via-git job if the build job has completed
           filters:
             branches:
               only: master # only run deploy-via-git job on master branch

@@ -1,19 +1,26 @@
-FROM ubuntu:18.04
+FROM node:lts as build-stage
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY . .
 
-RUN apt update && apt install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_10.x | bash && \
-    apt install -y nodejs && \
-    npm install -g gatsby-cli && \
-    apt purge -y --auto-remove curl && \
-    rm -rf /var/lib/apt/list/* && \
+RUN npm install -g gatsby-cli && \
     npm install && gatsby build
+
+FROM alpine:3.8
+
+WORKDIR /app
+
+COPY --from=build-stage /app/public /app/public
+
+RUN apk add --update --no-cache npm && \
+    npm install -g serve && \
+    adduser -D app
+
+USER app
 
 EXPOSE $PORT
 
-CMD gatsby serve -H 0.0.0.0 -p $PORT
+CMD /usr/bin/serve -s -l $PORT public
  
 

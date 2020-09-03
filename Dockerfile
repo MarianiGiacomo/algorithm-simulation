@@ -13,6 +13,7 @@ WORKDIR /app
 
 COPY --from=build-stage /app/public /app/public
 
+# unsafe-perm is necessary to handle 'not get uid/gid' error in Heroku
 RUN apk add --update --no-cache npm && \
     npm config set unsafe-perm true && \
     npm install -g serve && \
